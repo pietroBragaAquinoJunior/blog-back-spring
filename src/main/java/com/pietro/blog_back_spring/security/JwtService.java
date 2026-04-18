@@ -27,19 +27,26 @@ public class JwtService {
     }
 
     // Verificando com a chave publica.
-    public boolean isTokenValid(String token, UserDetails userDetails) {
+    public boolean isTokenFromThisUserAndNotExpired(String tokenJwt, UserDetails userDetails) {
         String subject = Jwts.parser()
             .verifyWith(pair.getPublic())
-            .build().parseSignedClaims(token).getPayload().getSubject();
+            .build().parseSignedClaims(tokenJwt).getPayload().getSubject();
 
         Date expiration = Jwts.parser().verifyWith(pair.getPublic())
-            .build().parseSignedClaims(token).getPayload().getExpiration();
+            .build().parseSignedClaims(tokenJwt).getPayload().getExpiration();
             
         if(subject.equals(userDetails.getUsername()) && new Date().before(expiration)){
             return true;
-        } else{
-            return false;
-        }
+        } 
+        return false;
+    }
+
+    public String getUsernameFromToken(String tokenJwt){
+        String username = Jwts.parser()
+            .verifyWith(pair.getPublic())
+            .build().parseSignedClaims(tokenJwt).getPayload().getSubject();
+
+        return username;
     }
 
 }
