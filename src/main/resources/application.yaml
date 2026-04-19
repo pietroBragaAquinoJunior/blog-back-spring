@@ -8,6 +8,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+    database: postgresql
+jwt:
+  secret: 1d0ca530e3ac5058972b174d7c2947dcfe9e8c1181a19ef661b8c86831cf2e15
+  expiration: 86400000  # 24 hours in milliseconds
+
