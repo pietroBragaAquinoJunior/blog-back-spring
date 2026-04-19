@@ -2,7 +2,7 @@
   {
     "name": "security.jwt.secret-key",
     "type": "java.lang.String",
-    "description": "Secret para assinatura e verificao dos tokens JWT"
+    "description": "Secret para assinar e verificar token jwt, precisa ser 256 -> 32 (tamanho) e codificado em BASE64URL encode. "
   },
   {
     "name": "security.jwt.expiration-time",
