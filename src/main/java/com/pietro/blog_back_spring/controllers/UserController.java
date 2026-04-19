@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.pietro.blog_back_spring.entities.User;
-import com.pietro.blog_back_spring.service.UserService;
+import com.pietro.blog_back_spring.services.UserService;
 import java.util.List;
 
 @RequestMapping("/users")
@@ -28,7 +28,7 @@ public class UserController {
         return ResponseEntity.ok(currentUser);
     }
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<User>> allUsers() {
         List <User> users = userService.allUsers();
 
