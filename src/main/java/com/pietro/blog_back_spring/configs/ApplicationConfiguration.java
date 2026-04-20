@@ -10,18 +10,18 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.pietro.blog_back_spring.repositories.UserRepository;
 
-@Configuration
-public class ApplicationConfiguration {
-    private final UserRepository userRepository;
+import lombok.RequiredArgsConstructor;
 
-    public ApplicationConfiguration(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+@Configuration
+@RequiredArgsConstructor
+public class ApplicationConfiguration {
+
+    private final UserRepository userRepository;
 
     @Bean
     UserDetailsService userDetailsService() {
         return username -> userRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
     @Bean
@@ -30,10 +30,10 @@ public class ApplicationConfiguration {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager() throws Exception {
-            DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(userDetailsService());
-            authProvider.setPasswordEncoder(passwordEncoder());
-            return new ProviderManager(authProvider);
+    AuthenticationManager authenticationManager() throws Exception {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(userDetailsService());
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return new ProviderManager(authProvider);
     }
 
 }

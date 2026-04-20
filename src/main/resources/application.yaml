@@ -8,8 +8,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
-    database: postgresql
-    open-in-view: false
+    open-in-view: true
 security:
   jwt:
     secret-key: _b3MKhBVzoPTJyiP2NmR2Ml_Lp62vmDr3dQwGq7FsO4

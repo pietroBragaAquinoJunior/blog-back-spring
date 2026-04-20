@@ -4,13 +4,22 @@ package com.pietro.blog_back_spring.services;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
 import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import com.pietro.blog_back_spring.entities.User;
 
 @Service
 public class JwtService {
@@ -29,31 +38,45 @@ public class JwtService {
             .getPayload().getSubject();
     }
 
-    public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+    public String generateToken(User user) {
+        return generateToken(new HashMap<>(), user);
     }
 
-    public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-        return buildToken(extraClaims, userDetails, jwtExpiration);
+    public String generateToken(Map<String, Object> extraClaims, User user) {
+        return generateToken(extraClaims, user, jwtExpiration);
     }
 
     public long getExpirationTime() {
         return jwtExpiration;
     }
 
-    private String buildToken(
+    private String generateToken(
             Map<String, Object> extraClaims,
-            UserDetails userDetails,
+            User user,
             long expiration
     ) {
-        return Jwts
-                .builder()
-                .claims(extraClaims)
-                .subject(userDetails.getUsername())
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(getSignInKey(), Jwts.SIG.HS256)
-                .compact();
+        Map<String, Object> claims = new HashMap<>();
+
+        Set<String> roles = user.getRoles().stream()
+            .map(role -> role.getName().name())
+            .collect(Collectors.toSet());
+
+        claims.put("roles", roles);
+
+        Set<String> permissions = user.getRoles().stream()
+            .flatMap(role -> role.getPermissions().stream())
+            .map(permission -> permission.getName())
+            .collect(Collectors.toSet());
+
+        claims.put("permissions", permissions);
+
+        return Jwts.builder()
+            .claims(claims)
+            .subject(user.getEmail())
+            .issuedAt(new Date(System.currentTimeMillis()))
+            .expiration(new Date(System.currentTimeMillis() + expiration))
+            .signWith(getSignInKey(), Jwts.SIG.HS256)
+            .compact();
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
