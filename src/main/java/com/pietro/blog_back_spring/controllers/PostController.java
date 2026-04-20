@@ -26,7 +26,7 @@ public class PostController {
     @PostMapping
     public ResponseEntity<Void> createPost(@RequestBody PostDto dto){
         User userLogged = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Post post = postService.createByDto(dto, userLogged);
+        Post post = postService.create(dto, userLogged);
         log.info("User: "+userLogged.getEmail()+", created a new post: "+post.getTitle());
         return ResponseEntity.ok(null);
     }

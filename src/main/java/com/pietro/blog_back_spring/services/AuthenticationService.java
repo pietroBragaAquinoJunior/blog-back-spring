@@ -10,11 +10,11 @@ import com.pietro.blog_back_spring.entities.Role;
 import com.pietro.blog_back_spring.entities.User;
 import com.pietro.blog_back_spring.enums.ERole;
 import com.pietro.blog_back_spring.exceptions.BadRequestException;
+import com.pietro.blog_back_spring.mappers.UserMapper;
 import com.pietro.blog_back_spring.repositories.RoleRepository;
 import com.pietro.blog_back_spring.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import java.util.Optional;
 import java.util.Set;
 
@@ -28,37 +28,32 @@ public class AuthenticationService {
 
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final UserMapper userMapper;
 
-    public User register(RegisterDto dto) throws BadRequestException {
+    public User register(RegisterDto registerDto) throws BadRequestException {
 
-        Optional<User> user = userRepository.findByEmail(dto.getEmail());
+        Optional<User> user = userRepository.findByEmail(registerDto.getEmail());
         if(user.isPresent()){
-            // Mensagem boa para a gente entender no console o que aconteceu. (caso haja erro)
-            log.info("Cannot create user again with the same email: "+dto.getEmail()+".");
-            // Mensagem para dar uma vaga noção ao usuario, quanto menos ele souber melhor.
-            throw new BadRequestException("It's not possible to create user: "+dto.getEmail()+", with this information.");
+            log.info("Cannot create user again with the same email: "+registerDto.getEmail()+".");
+            throw new BadRequestException("It's not possible to create user: "+registerDto.getEmail()+", with this information.");
         } 
         
-
+        User userFromRegisterDto = userMapper.toUser(registerDto);
         Set<Role> roles = Set.of(roleRepository.findByName(ERole.USER).orElseThrow());
-        return userRepository.save(
-            User.builder().fullName(dto.getFullName())
-            .email(dto.getEmail())
-            .password(passwordEncoder.encode(dto.getPassword()))
-            .roles(roles)
-            .enabled(true).build()
-        );
+        userFromRegisterDto.setRoles(roles);
+        userFromRegisterDto.setEnabled(true);
+
+        return userRepository.save(userFromRegisterDto);
     }
 
-    public User authenticate(LoginDto input) {
+    public User authenticate(LoginDto loginDto) {
         authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
-                input.getEmail(),
-                input.getPassword()
+                loginDto.getEmail(),
+                loginDto.getPassword()
             )
         );
-        return userRepository.findByEmail(input.getEmail()).orElseThrow();
+        return userRepository.findByEmail(loginDto.getEmail()).orElseThrow();
     }
 }

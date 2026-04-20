@@ -10,10 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class PostDto {
-    
     private String title;
     private String description;
     private String html;
     private boolean published;
-
 }

@@ -22,8 +22,8 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('CAN_DISABLE_USER')")
     @PostMapping("/disable/id/{id}")
-    public ResponseEntity<Void> disableUser(@PathVariable Long id){
-        userService.disableById(id);
+    public ResponseEntity<Void> disable(@PathVariable Long id){
+        userService.disable(id);
         User userLogged = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         log.info("User: "+ userLogged.getEmail() + " disabled the user with id: "+ id + ", with success.");
         return ResponseEntity.ok(null);
