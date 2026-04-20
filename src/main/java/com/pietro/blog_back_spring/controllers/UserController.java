@@ -21,7 +21,7 @@ public class UserController {
     private final UserService userService;
 
     @PreAuthorize("hasAuthority('DISABLE_USER')")
-    @PostMapping("/desativar/id/{id}")
+    @PostMapping("/disable/id/{id}")
     public ResponseEntity<Void> disableUser(@PathVariable Long id){
         userService.disableUser(id);
         User userLogged = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

@@ -2,7 +2,6 @@ package com.pietro.blog_back_spring.controllers;
 
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +27,7 @@ public class AuthenticationController {
     @PostMapping("/signup")
     public ResponseEntity<Void> register(@RequestBody RegisterUserDto dto) throws BadRequestException {
         User registeredUser = authenticationService.register(dto);
-        log.info("User: "+ registeredUser.getEmail()+" , has been registered and logged in.");
+        log.info("User: "+ registeredUser.getEmail()+" , has been registered.");
         return ResponseEntity.ok().body(null);
     }
 
@@ -37,8 +36,7 @@ public class AuthenticationController {
         User authenticatedUser = authenticationService.authenticate(dto);
         String jwtToken = jwtService.generateToken(authenticatedUser);
         LoginResponse loginResponse = LoginResponse.builder().token(jwtToken).expiresIn(jwtService.getExpirationTime()).build();
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        log.info("User: "+user.getEmail()+", has logged in.");
+        log.info("User: "+ authenticatedUser.getEmail()+" , has been authenticated and received his JWT token.");
         return ResponseEntity.ok(loginResponse);
     }
 }
