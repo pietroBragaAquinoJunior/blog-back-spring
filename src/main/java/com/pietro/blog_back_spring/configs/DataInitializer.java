@@ -25,30 +25,25 @@ public class DataInitializer {
         Role adminRole = Role.builder().name(ERole.ADMIN).permissions(Set.of(disableUser)).build();
         Role moderatorRole = Role.builder().name(ERole.MODERATOR).permissions(Set.of(disableUser)).build();
         Role userRole = Role.builder().name(ERole.USER).build();
-        userRepository.save(
-            User.builder().fullName("Piêtro")
+        User pietro = User.builder().fullName("Piêtro")
             .email("pietro@gmail.com")
             .password(passwordEncoder.encode("123"))
             .roles(Set.of(adminRole))
             .enabled(true)
-            .build()
-        );
-        userRepository.save(
-            User.builder().fullName("Ismael")
+            .build();
+        User ismael = User.builder().fullName("Ismael")
             .email("ismael@gmail.com")
             .password(passwordEncoder.encode("123"))
             .roles(Set.of(moderatorRole))
             .enabled(true)
-            .build()
-        );
-        userRepository.save(
-            User.builder().fullName("Nizar")
+            .build();
+        User nizar =  User.builder().fullName("Nizar")
             .email("nizar@gmail.com")
             .password(passwordEncoder.encode("123"))
             .roles(Set.of(userRole))
             .enabled(true)
-            .build()
-        );
+            .build();
+        userRepository.saveAll(Set.of(pietro, ismael, nizar));
     }
 
 }
