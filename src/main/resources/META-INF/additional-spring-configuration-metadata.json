@@ -2,11 +2,11 @@
   {
     "name": "security.jwt.secret-key",
     "type": "java.lang.String",
-    "description": "Secret para assinar e verificar token jwt, precisa ser 256 -> 32 (tamanho) e codificado em BASE64URL encode. "
+    "description": "256-bits (32 bytes) key, encoded with BASE64URL. Used to sign and verify JWT tokens (HMAC)."
   },
   {
     "name": "security.jwt.expiration-time",
     "type": "java.lang.String",
-    "description": "Tempo que um token vive ate expirar."
+    "description": "Time for the token to expire."
   }
 ]}

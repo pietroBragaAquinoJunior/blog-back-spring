@@ -16,27 +16,39 @@ import lombok.RequiredArgsConstructor;
 public class DataInitializer {
 
     private final PasswordEncoder passwordEncoder;
-
     private final UserRepository userRepository;
 
     @PostConstruct
     public void seedRolesAndPermissions() {
-        
         if (userRepository.findByEmail("pietro@gmail.com").isPresent()) return;
-
-        Permission readUserPermission = new Permission(null, "READ_USER");
-        Permission deleteUserPermission = new Permission(null, "DELETE_USER");
-
-        Role admin = new Role();
-        admin.setName(ERole.ADMIN);
-        admin.setPermissions(Set.of(readUserPermission, deleteUserPermission));
-
-        Role user = new Role();
-        user.setName(ERole.USER);
-
-        userRepository.save(new User(null, "Piêtro Braga", "pietro@gmail.com", passwordEncoder.encode("123"), null, null, Set.of(admin)));
-        userRepository.save(new User(null, "Nizar Mohsen", "nizar@gmail.com", passwordEncoder.encode("123"), null, null, Set.of(user)));
-
+        Permission disableUser = Permission.builder().name("DISABLE_USER").build();
+        Role adminRole = Role.builder().name(ERole.ADMIN).permissions(Set.of(disableUser)).build();
+        Role moderatorRole = Role.builder().name(ERole.MODERATOR).permissions(Set.of(disableUser)).build();
+        Role userRole = Role.builder().name(ERole.USER).build();
+        userRepository.save(
+            User.builder().fullName("Piêtro")
+            .email("pietro@gmail.com")
+            .password(passwordEncoder.encode("123"))
+            .roles(Set.of(adminRole))
+            .enabled(true)
+            .build()
+        );
+        userRepository.save(
+            User.builder().fullName("Ismael")
+            .email("ismael@gmail.com")
+            .password(passwordEncoder.encode("123"))
+            .roles(Set.of(moderatorRole))
+            .enabled(true)
+            .build()
+        );
+        userRepository.save(
+            User.builder().fullName("Nizar")
+            .email("nizar@gmail.com")
+            .password(passwordEncoder.encode("123"))
+            .roles(Set.of(userRole))
+            .enabled(true)
+            .build()
+        );
     }
 
 }
