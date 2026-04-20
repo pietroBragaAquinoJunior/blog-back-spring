@@ -4,8 +4,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.pietro.blog_back_spring.dtos.LoginUserDto;
-import com.pietro.blog_back_spring.dtos.RegisterUserDto;
+import com.pietro.blog_back_spring.dtos.LoginDto;
+import com.pietro.blog_back_spring.dtos.RegisterDto;
 import com.pietro.blog_back_spring.entities.Role;
 import com.pietro.blog_back_spring.entities.User;
 import com.pietro.blog_back_spring.enums.ERole;
@@ -31,7 +31,7 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
-    public User register(RegisterUserDto dto) throws BadRequestException {
+    public User register(RegisterDto dto) throws BadRequestException {
 
         Optional<User> user = userRepository.findByEmail(dto.getEmail());
         if(user.isPresent()){
@@ -52,7 +52,7 @@ public class AuthenticationService {
         );
     }
 
-    public User authenticate(LoginUserDto input) {
+    public User authenticate(LoginDto input) {
         authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
                 input.getEmail(),

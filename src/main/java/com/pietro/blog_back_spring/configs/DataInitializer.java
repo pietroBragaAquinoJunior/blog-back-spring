@@ -21,10 +21,18 @@ public class DataInitializer {
     @PostConstruct
     public void seedRolesAndPermissions() {
         if (userRepository.findByEmail("pietro@gmail.com").isPresent()) return;
-        Permission disableUser = Permission.builder().name("DISABLE_USER").build();
-        Role adminRole = Role.builder().name(ERole.ADMIN).permissions(Set.of(disableUser)).build();
-        Role moderatorRole = Role.builder().name(ERole.MODERATOR).permissions(Set.of(disableUser)).build();
-        Role userRole = Role.builder().name(ERole.USER).build();
+        Permission disableUser = Permission.builder().name("CAN_DISABLE_USER").build();
+        Permission createPost = Permission.builder().name("CAN_CREATE_POST").build();
+        Role adminRole = Role.builder().name(ERole.ADMIN).permissions(Set.of(
+            disableUser,
+            createPost
+        )).build();
+        Role moderatorRole = Role.builder().name(ERole.MODERATOR).permissions(Set.of(
+
+        )).build();
+        Role userRole = Role.builder().name(ERole.USER).permissions(Set.of(
+            
+        )).build();
         User pietro = User.builder().fullName("Piêtro")
             .email("pietro@gmail.com")
             .password(passwordEncoder.encode("123"))

@@ -18,7 +18,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public void disableUser(Long id){
+    public void disableById(Long id){
         User user = userRepository.findById(id).orElseThrow(() -> {
             // Mensagem boa para a gente entender no console o que aconteceu. (caso haja erro)
             log.info("The user with id: "+id+", cannot be disabled because he doesn't exist.");
@@ -36,8 +36,5 @@ public class UserService {
         user.setEnabled(false);
         userRepository.save(user);
     }
-
-    public List<User> allUsers() {
-        return userRepository.findAll();
-    }
+    
 }

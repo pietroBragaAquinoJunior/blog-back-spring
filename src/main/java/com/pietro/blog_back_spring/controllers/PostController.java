@@ -3,29 +3,31 @@ package com.pietro.blog_back_spring.controllers;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.pietro.blog_back_spring.dtos.PostDto;
+import com.pietro.blog_back_spring.entities.Post;
 import com.pietro.blog_back_spring.entities.User;
-import com.pietro.blog_back_spring.services.UserService;
+import com.pietro.blog_back_spring.services.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@RequestMapping("/users")
 @RestController
+@RequestMapping("/posts")
 @RequiredArgsConstructor
-public class UserController {
+public class PostController {
+    
+    private final PostService postService;
 
-    private final UserService userService;
-
-    @PreAuthorize("hasAuthority('CAN_DISABLE_USER')")
-    @PostMapping("/disable/id/{id}")
-    public ResponseEntity<Void> disableUser(@PathVariable Long id){
-        userService.disableById(id);
+    @PreAuthorize("hasAuthority('CAN_CREATE_POST')")
+    @PostMapping
+    public ResponseEntity<Void> createPost(@RequestBody PostDto dto){
         User userLogged = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        log.info("User: "+ userLogged.getEmail() + " disabled the user with id: "+ id + ", with success.");
+        Post post = postService.createByDto(dto, userLogged);
+        log.info("User: "+userLogged.getEmail()+", created a new post: "+post.getTitle());
         return ResponseEntity.ok(null);
     }
 

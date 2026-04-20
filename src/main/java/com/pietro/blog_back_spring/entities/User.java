@@ -53,6 +53,9 @@ public class User implements UserDetails {
 
     private boolean enabled;
 
+    @OneToMany(mappedBy="user", cascade = CascadeType.ALL)
+    private Set<Post> posts;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<GrantedAuthority> authorities = new HashSet<>();
