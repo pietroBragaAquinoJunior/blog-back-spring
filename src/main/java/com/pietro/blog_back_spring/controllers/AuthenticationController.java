@@ -36,7 +36,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Void> authenticate(@RequestBody LoginDto dto, HttpServletResponse response) {
+    public ResponseEntity<User> authenticate(@RequestBody LoginDto dto, HttpServletResponse response) {
         User authenticatedUser = authenticationService.authenticate(dto);
         String jwtToken = jwtService.generateToken(authenticatedUser);
         log.info("User: "+ authenticatedUser.getEmail()+" , has been authenticated and received his JWT token.");
@@ -60,6 +60,6 @@ public class AuthenticationController {
 
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(authenticatedUser);
     }
 }
