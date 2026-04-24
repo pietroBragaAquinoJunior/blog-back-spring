@@ -1,6 +1,7 @@
 package com.pietro.blog_back_spring.controllers;
 
 import org.apache.coyote.BadRequestException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +14,6 @@ import com.pietro.blog_back_spring.dtos.RegisterDto;
 import com.pietro.blog_back_spring.entities.User;
 import com.pietro.blog_back_spring.services.AuthenticationService;
 import com.pietro.blog_back_spring.services.JwtService;
-
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +23,9 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequiredArgsConstructor
 public class AuthenticationController {
+
+    @Value("${security.cookie.expiration-time}")
+    private long cookieMaxAge;
 
     private final JwtService jwtService;
     private final AuthenticationService authenticationService;
@@ -55,7 +57,7 @@ public class AuthenticationController {
             .secure(true)
             .path("/")
             .sameSite("Strict")
-            .maxAge(jwtService.getExpirationTime())
+            .maxAge(cookieMaxAge)
             .build();
 
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());

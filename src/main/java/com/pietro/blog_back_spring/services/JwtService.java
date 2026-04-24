@@ -10,7 +10,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import com.pietro.blog_back_spring.entities.User;
 
@@ -22,7 +21,8 @@ public class JwtService {
     @Value("${security.jwt.expiration-time}")
     private long jwtExpiration;
 
-    public String extractUsername(String token) {
+    // This method throws exceptions if signature fail or token jwt is expired.
+    public String extractSubjectAndVerifySignatureAndVerifyExpiration(String token) {
         return Jwts
             .parser()
             .verifyWith(getSignInKey())
@@ -49,28 +49,6 @@ public class JwtService {
             .expiration(new Date(System.currentTimeMillis() + jwtExpiration))
             .signWith(getSignInKey(), Jwts.SIG.HS256)
             .compact();
-    }
-
-    public long getExpirationTime() {
-        return jwtExpiration;
-    }
-
-    public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
-    }
-
-    private boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
-    }
-
-    private Date extractExpiration(String token) {
-        return Jwts
-            .parser()
-            .verifyWith(getSignInKey())
-            .build()
-            .parseSignedClaims(token)
-            .getPayload().getExpiration();
     }
 
     private SecretKey getSignInKey() {

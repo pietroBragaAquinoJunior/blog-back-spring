@@ -7,6 +7,11 @@
   {
     "name": "security.jwt.expiration-time",
     "type": "java.lang.String",
-    "description": "Time for the token to expire."
+    "description": "Time for the token JWT to expire in milisseconds. "
+  },
+  {
+    "name": "security.cookie.expiration-time",
+    "type": "java.lang.String",
+    "description": "Time for the Secure Cookie in frontend to expire in seconds (max-age attribute)."
   }
 ]}
