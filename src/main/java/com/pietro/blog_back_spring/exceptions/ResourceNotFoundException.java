@@ -2,8 +2,8 @@ package com.pietro.blog_back_spring.exceptions;
 
 // https://www.springjavalab.com/2025/05/spring-boot-global-exception-handling.html
 
-public class BadRequestException extends RuntimeException {
-    public BadRequestException(String message) {
+public class ResourceNotFoundException extends RuntimeException {
+    public ResourceNotFoundException(String message) {
         super(message);
     }
 }

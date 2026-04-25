@@ -1,0 +1,9 @@
+services:
+  blog-database:
+    image: postgres:18.3
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=myuser
+      - POSTGRES_PASSWORD=mypassword
+      - POSTGRES_DB=blog_db

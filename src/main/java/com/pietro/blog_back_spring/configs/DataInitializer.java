@@ -37,19 +37,19 @@ public class DataInitializer {
         )).build();
         User pietro = User.builder().fullName("Piêtro")
             .email("pietro@gmail.com")
-            .password(passwordEncoder.encode("123"))
+            .password(passwordEncoder.encode("172983456"))
             .roles(Set.of(adminRole))
             .enabled(true)
             .build();
         User ismael = User.builder().fullName("Ismael")
             .email("ismael@gmail.com")
-            .password(passwordEncoder.encode("123"))
+            .password(passwordEncoder.encode("172983456"))
             .roles(Set.of(moderatorRole))
             .enabled(true)
             .build();
         User nizar =  User.builder().fullName("Nizar")
             .email("nizar@gmail.com")
-            .password(passwordEncoder.encode("123"))
+            .password(passwordEncoder.encode("172983456"))
             .roles(Set.of(userRole))
             .enabled(true)
             .build();

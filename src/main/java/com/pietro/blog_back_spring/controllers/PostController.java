@@ -11,6 +11,8 @@ import com.pietro.blog_back_spring.dtos.PostDto;
 import com.pietro.blog_back_spring.entities.Post;
 import com.pietro.blog_back_spring.entities.User;
 import com.pietro.blog_back_spring.services.PostService;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,7 +26,7 @@ public class PostController {
 
     @PreAuthorize("hasAuthority('CAN_CREATE_POST')")
     @PostMapping
-    public ResponseEntity<Void> createPost(@RequestBody PostDto dto){
+    public ResponseEntity<Void> createPost(@Valid @RequestBody PostDto dto){
         User userLogged = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Post post = postService.create(dto, userLogged);
         log.info("User: "+userLogged.getEmail()+", created a new post: "+post.getTitle());

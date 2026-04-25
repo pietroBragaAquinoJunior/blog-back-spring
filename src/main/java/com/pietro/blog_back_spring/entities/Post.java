@@ -35,6 +35,7 @@ public class Post {
     
     private String description;
 
+    @Column(columnDefinition = "TEXT")
     private String html;
 
     @ManyToOne

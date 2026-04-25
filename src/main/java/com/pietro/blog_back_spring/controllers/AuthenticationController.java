@@ -15,6 +15,7 @@ import com.pietro.blog_back_spring.entities.User;
 import com.pietro.blog_back_spring.services.AuthenticationService;
 import com.pietro.blog_back_spring.services.JwtService;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,14 +32,14 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/signup")
-    public ResponseEntity<Void> register(@RequestBody RegisterDto dto) throws BadRequestException {
+    public ResponseEntity<Void> register(@Valid @RequestBody RegisterDto dto) throws BadRequestException {
         User registeredUser = authenticationService.register(dto);
         log.info("User: "+ registeredUser.getEmail()+" , has been registered.");
         return ResponseEntity.ok(null);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> authenticate(@RequestBody LoginDto dto, HttpServletResponse response) {
+    public ResponseEntity<User> authenticate(@Valid @RequestBody LoginDto dto, HttpServletResponse response) {
         User authenticatedUser = authenticationService.authenticate(dto);
         String jwtToken = jwtService.generateToken(authenticatedUser);
         log.info("User: "+ authenticatedUser.getEmail()+" , has been authenticated and received his JWT token.");
