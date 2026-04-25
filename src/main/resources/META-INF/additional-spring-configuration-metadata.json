@@ -13,5 +13,15 @@
     "name": "security.cookie.expiration-time",
     "type": "java.lang.String",
     "description": "Time for the Secure Cookie in frontend to expire in seconds (max-age attribute)."
+  },
+  {
+    "name": "security.reset-password.expiration-time",
+    "type": "java.lang.String",
+    "description": "Time for the uuid reset password token expire in seconds."
+  },
+  {
+    "name": "frontend.base-url",
+    "type": "java.lang.String",
+    "description": "Base url of the frontend application."
   }
 ]}

@@ -9,11 +9,29 @@ spring:
     hibernate:
       ddl-auto: create-drop
     open-in-view: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${SMTP_USERNAME}
+    # https://support.google.com/accounts/answer/185833?visit_id=639127237414040113-1449520814&p=InvalidSecondFactor&rd=1
+    password: ${SMTP_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
 security:
   jwt:
     secret-key: _b3MKhBVzoPTJyiP2NmR2Ml_Lp62vmDr3dQwGq7FsO4
     expiration-time: 86400000 # 24h
   cookie: 
     expiration-time: 86400  # 24h
+  reset-password:
+    expiration-time: 86400 # 24h
+
+frontend:
+  base-url: http://localhost:5173
 
 # security.jwt.expiration-time has to be the same as security.cookie.expiration-time so both will be expired and removed together.

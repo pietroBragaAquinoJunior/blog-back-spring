@@ -9,6 +9,8 @@ import com.pietro.blog_back_spring.entities.User;
 import com.pietro.blog_back_spring.exceptions.BadRequestException;
 import com.pietro.blog_back_spring.mappers.PostMapper;
 import com.pietro.blog_back_spring.repositories.PostRepository;
+
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,6 +25,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final PostMapper postMapper;
 
+    @Transactional
     public Post create(PostDto dto, User userLogged) {
         Optional<Post> postOptional = postRepository.findByTitle(dto.getTitle());
         if(postOptional.isPresent()){

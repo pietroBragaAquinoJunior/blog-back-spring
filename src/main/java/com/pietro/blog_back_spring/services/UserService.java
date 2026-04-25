@@ -1,9 +1,12 @@
 package com.pietro.blog_back_spring.services;
 
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 import com.pietro.blog_back_spring.entities.User;
 import com.pietro.blog_back_spring.exceptions.BadRequestException;
 import com.pietro.blog_back_spring.repositories.UserRepository;
+
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,6 +20,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    @Transactional
     public void disable(Long id){
         User user = userRepository.findById(id).orElseThrow(() -> {
             log.info("The user with id: "+id+", cannot be disabled because he doesn't exist.");
@@ -31,5 +35,11 @@ public class UserService {
         user.setEnabled(false);
         userRepository.save(user);
     }
+
+    public Optional<User> findByEmail(String email){
+        return userRepository.findByEmail(email);
+    }
+
+  
 
 }

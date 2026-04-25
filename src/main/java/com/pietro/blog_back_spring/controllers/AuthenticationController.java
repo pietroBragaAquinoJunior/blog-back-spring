@@ -1,19 +1,24 @@
 package com.pietro.blog_back_spring.controllers;
 
+import java.util.Optional;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.pietro.blog_back_spring.dtos.LoginDto;
 import com.pietro.blog_back_spring.dtos.RegisterDto;
+import com.pietro.blog_back_spring.dtos.ResetPasswordDto;
 import com.pietro.blog_back_spring.entities.User;
+import com.pietro.blog_back_spring.exceptions.SuccessResponse;
 import com.pietro.blog_back_spring.services.AuthenticationService;
 import com.pietro.blog_back_spring.services.JwtService;
+import com.pietro.blog_back_spring.services.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +35,8 @@ public class AuthenticationController {
 
     private final JwtService jwtService;
     private final AuthenticationService authenticationService;
+    private final UserService userService;
+    
 
     @PostMapping("/signup")
     public ResponseEntity<Void> register(@Valid @RequestBody RegisterDto dto) throws BadRequestException {
@@ -65,4 +72,24 @@ public class AuthenticationController {
 
         return ResponseEntity.ok(authenticatedUser);
     }
+
+    @PostMapping("/reset-password/email/{email}")
+    public ResponseEntity<SuccessResponse> postMethodName(@PathVariable String email) {
+        try{
+            authenticationService.createPasswordResetTokenForUserAndSendEmail(email);
+        }catch(Exception error){
+            log.info(error.getMessage());
+            error.printStackTrace();
+            return ResponseEntity.ok(new SuccessResponse("O email será enviado caso ele esteja cadastrado."));
+        }
+        return ResponseEntity.ok(new SuccessResponse("O email será enviado caso ele esteja cadastrado."));
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<SuccessResponse> postMethodName(@Valid @RequestBody ResetPasswordDto dto) throws BadRequestException {
+        authenticationService.validateTokenAndSaveNewPasswordForUser(dto.getToken(), dto.getNewPassword());
+        return ResponseEntity.ok(new SuccessResponse("A senha foi alterada com sucesso."));
+    }
+    
+
 }

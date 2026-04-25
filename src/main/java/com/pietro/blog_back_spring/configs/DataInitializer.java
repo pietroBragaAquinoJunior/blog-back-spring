@@ -36,7 +36,7 @@ public class DataInitializer {
             
         )).build();
         User pietro = User.builder().fullName("Piêtro")
-            .email("pietro@gmail.com")
+            .email("pietrobragaaquino@gmail.com")
             .password(passwordEncoder.encode("172983456"))
             .roles(Set.of(adminRole))
             .enabled(true)
@@ -47,8 +47,8 @@ public class DataInitializer {
             .roles(Set.of(moderatorRole))
             .enabled(true)
             .build();
-        User nizar =  User.builder().fullName("Nizar")
-            .email("nizar@gmail.com")
+        User nizar =  User.builder().fullName("Carol")
+            .email("caroline-aquino@hotmail.com")
             .password(passwordEncoder.encode("172983456"))
             .roles(Set.of(userRole))
             .enabled(true)
