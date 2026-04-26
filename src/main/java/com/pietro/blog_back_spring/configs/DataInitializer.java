@@ -22,18 +22,29 @@ public class DataInitializer {
     public void seedRolesAndPermissions() {
         if (userRepository.findByEmail("pietro@gmail.com").isPresent()) return;
         Permission canDisableUser = Permission.builder().name("CAN_DISABLE_USER").build();
+
         Permission canCreatePost = Permission.builder().name("CAN_CREATE_POST").build();
+        Permission canCreateCategories = Permission.builder().name("CAN_CREATE_CATEGORIES").build();
+
         Permission canSeePosts = Permission.builder().name("CAN_SEE_POSTS").build();
+        Permission canSeeCategories = Permission.builder().name("CAN_SEE_CATEGORIES").build();
+
         Role adminRole = Role.builder().name(ERole.ADMIN).permissions(Set.of(
             canDisableUser,
+      
+            canSeePosts,
+            canSeeCategories,
+            
             canCreatePost,
-            canSeePosts
+            canCreateCategories
         )).build();
         Role moderatorRole = Role.builder().name(ERole.MODERATOR).permissions(Set.of(
-
+            canSeePosts,
+            canSeeCategories
         )).build();
         Role userRole = Role.builder().name(ERole.USER).permissions(Set.of(
-            
+            canSeePosts,
+            canSeeCategories
         )).build();
         User pietro = User.builder().fullName("Piêtro")
             .email("pietrobragaaquino@gmail.com")

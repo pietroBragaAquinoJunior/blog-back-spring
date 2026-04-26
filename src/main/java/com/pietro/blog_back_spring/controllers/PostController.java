@@ -1,8 +1,11 @@
 package com.pietro.blog_back_spring.controllers;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,5 +35,16 @@ public class PostController {
         log.info("Usuário: "+userLogged.getEmail()+", criou uma nova postagem: "+post.getTitle());
         return ResponseEntity.ok(new SuccessResponse("Postagem foi criada com sucesso."));
     }
+
+    // @PreAuthorize("hasAuthority('CAN_SEE_POSTS')")
+    // @GetMapping
+    // public ResponseEntity<List<PostDto>> canSeePosts(@Valid @RequestBody PostDto dto){
+    //     User userLogged = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    //     Post post = postService.create(dto, userLogged);
+    //     log.info("Usuário: "+userLogged.getEmail()+", criou uma nova postagem: "+post.getTitle());
+    //     return ResponseEntity.ok(new SuccessResponse("Postagem foi criada com sucesso."));
+    // }
+
+
 
 }

@@ -29,21 +29,21 @@ public class PasswordResetToken {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
  
-    @Column(name = "uuid_token")
+    @Column(name = "uuid_token", nullable = false)
     private String uuidToken;
  
-    @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false, name = "user_id")
+    @OneToOne(targetEntity = User.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
  
-    @Column(name = "expiry_date")
+    @Column(name = "expiry_date", nullable = false)
     private Date expiryDate;
 
     @CreationTimestamp
-    @Column(updatable = false, name = "created_at")
+    @Column(updatable = false, name = "created_at", nullable = false)
     private Date createdAt;
 
     @UpdateTimestamp
-    @Column(name = "updated_at")
+    @Column(name = "updated_at", nullable = false)
     private Date updatedAt;
 }

@@ -10,9 +10,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -27,7 +25,6 @@ import java.util.Set;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false)
     private Long id;
 
     @Column(nullable = false)
@@ -41,20 +38,21 @@ public class User implements UserDetails {
     private String password;
 
     @CreationTimestamp
-    @Column(updatable = false, name = "created_at")
+    @Column(updatable = false, name = "created_at", nullable = false)
     private Date createdAt;
 
     @UpdateTimestamp
-    @Column(name = "updated_at")
+    @Column(name = "updated_at", nullable = false)
     private Date updatedAt;
 
     @Builder.Default
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
+    @Column(nullable = false)
     private boolean enabled;
 
     @OneToMany(mappedBy="user", cascade = CascadeType.ALL)

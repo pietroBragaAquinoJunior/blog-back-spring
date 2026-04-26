@@ -1,6 +1,7 @@
 package com.pietro.blog_back_spring.dtos;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,5 +26,6 @@ public class PostDto {
     @Size(min = 5, message = "O html deve ter no mínimo 5 caracteres.")
     private String html;
 
+    @NotNull
     private boolean published;
 }
