@@ -45,11 +45,11 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public User register(RegisterDto registerDto) throws BadRequestException {
+    public User register(RegisterDto registerDto) {
         Optional<User> user = userRepository.findByEmail(registerDto.getEmail());
         if (user.isPresent()) {
-            log.info("Cannot create user again with the same email: " + registerDto.getEmail() + ".");
-            throw new BadRequestException("It's not possible to create user: " + registerDto.getEmail() + ", with this information.");
+            log.info("Não é possível criar dois usuários com mesmo email: " + registerDto.getEmail());
+            throw new BadRequestException("Não foi possível criar o usuário: " + registerDto.getEmail() + " com essa informação");
         }
         User userFromRegisterDto = userMapper.toUser(registerDto);
         Set<Role> roles = Set.of(roleRepository.findByName(ERole.USER).orElseThrow());
@@ -67,10 +67,10 @@ public class AuthenticationService {
     }
 
     @Transactional
-    public void createPasswordResetTokenForUserAndSendEmail(String email) throws MessagingException, BadRequestException {
+    public void createPasswordResetTokenForUserAndSendEmail(String email) throws MessagingException  {
         Optional<User> userOptional = userRepository.findByEmail(email);
         if(userOptional.isEmpty()){
-            log.info("Não foi possível encontrar usuário com o email: "+ email);
+            log.info("Não é possível resetar a senha do usuário [1] se o email não foi encontrado: "+ email);
             throw new BadRequestException("Não foi possível criar o token.");
         }
         User user = userOptional.get();
@@ -84,15 +84,15 @@ public class AuthenticationService {
     }
 
     @Transactional
-    public void validateTokenAndSaveNewPasswordForUser(String token, String newPassword) throws BadRequestException{
+    public void validateTokenAndSaveNewPasswordForUser(String token, String newPassword)  {
         Optional<PasswordResetToken> passwordResetTokenOptional = passwordResetTokenRepository.findByUuidToken(token);
         if(passwordResetTokenOptional.isEmpty()){
-            log.info("Alguém tentou usar um token inválido para resetar a senha de alguma conta.");
+            log.info("Alguém tentou usar um token inválido para resetar senha [2].");
             throw new BadRequestException("A senha não pôde ser resetada.");
         }
         Optional<User> userOptional = userRepository.findById(passwordResetTokenOptional.get().getUser().getId());
         if(userOptional.isEmpty()){
-            log.info("Alguém tentou usar um token para resetar um usuário que não foi encontrado no banco.");
+            log.info("Alguém tentou usar um token para resetar um usuário que não foi encontrado no banco. [2]");
             throw new BadRequestException("A senha não pôde ser resetada.");
         }
         User userToUpdate = userOptional.get();

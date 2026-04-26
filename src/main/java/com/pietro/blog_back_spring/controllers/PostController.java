@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.pietro.blog_back_spring.dtos.PostDto;
 import com.pietro.blog_back_spring.entities.Post;
 import com.pietro.blog_back_spring.entities.User;
+import com.pietro.blog_back_spring.exceptions.SuccessResponse;
 import com.pietro.blog_back_spring.services.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,11 +26,11 @@ public class PostController {
 
     @PreAuthorize("hasAuthority('CAN_CREATE_POST')")
     @PostMapping
-    public ResponseEntity<Void> createPost(@Valid @RequestBody PostDto dto){
+    public ResponseEntity<SuccessResponse> createPost(@Valid @RequestBody PostDto dto){
         User userLogged = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Post post = postService.create(dto, userLogged);
-        log.info("User: "+userLogged.getEmail()+", created a new post: "+post.getTitle());
-        return ResponseEntity.ok(null);
+        log.info("Usuário: "+userLogged.getEmail()+", criou uma nova postagem: "+post.getTitle());
+        return ResponseEntity.ok(new SuccessResponse("Postagem foi criada com sucesso."));
     }
 
 }

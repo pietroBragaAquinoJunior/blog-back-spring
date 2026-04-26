@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.pietro.blog_back_spring.entities.User;
+import com.pietro.blog_back_spring.exceptions.SuccessResponse;
 import com.pietro.blog_back_spring.services.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,11 +23,11 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('CAN_DISABLE_USER')")
     @PostMapping("/disable/id/{id}")
-    public ResponseEntity<Void> disable(@PathVariable Long id){
+    public ResponseEntity<SuccessResponse> disable(@PathVariable Long id){
         userService.disable(id);
         User userLogged = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        log.info("User: "+ userLogged.getEmail() + " disabled the user with id: "+ id + ", with success.");
-        return ResponseEntity.ok(null);
+        log.info("Usuário: "+ userLogged.getEmail() + " desabilitou o usuário: "+ id + ", com sucesso.");
+        return ResponseEntity.ok(new SuccessResponse("Usuário foi desabilitado com sucesso."));
     }
 
 }

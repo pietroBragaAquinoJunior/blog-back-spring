@@ -19,26 +19,26 @@ public class EmailService {
         this.mailSender = mailSender;
     }
 
-    public void sendResetEmail(String to, String token) throws MessagingException {
+    public void sendResetEmail(String to, String token) throws MessagingException  {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
         helper.setTo(to);
-        helper.setFrom("no-reply@myblog.com");
-        helper.setSubject("Reset your password");
+        helper.setFrom("nao-responder@myblog.com");
+        helper.setSubject("Redefinir a senha");
         helper.setText(
             String.format(
                 """
-                    Use this token: %s to reset your account.
-                    Please acces: %s/reset-password-second to reset password.
+                    Use este token: %s para redefinir a senha da sua conta.
+                    Por favor acesse: %s/reset-password-second para redefinir a sua senha.
                 """, token, frontendBaseUrl)
             ,
             String.format(
                  """
                     <div>
-                    <p>Use this token: %s to reset your account.</p>
-                    <p>Open the link below to reset your password:</p>
-                    <p><a href=%s/reset-password-second>Reset password</a></p>
+                    <p>Use este token: %s para redefinir a senha da sua conta.</p>
+                    <p>Entre no link abaixo:</p>
+                    <p><a href=%s/reset-password-second>Redefinir Senha</a></p>
                     </div>
                 """
                 , token, frontendBaseUrl)

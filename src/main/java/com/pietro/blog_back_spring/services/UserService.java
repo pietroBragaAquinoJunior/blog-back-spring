@@ -23,13 +23,13 @@ public class UserService {
     @Transactional
     public void disable(Long id){
         User user = userRepository.findById(id).orElseThrow(() -> {
-            log.info("The user with id: "+id+", cannot be disabled because he doesn't exist.");
-            return new BadRequestException("It's not possible to disable the user with id: "+id+".");
+            log.info("O usuário com o id: "+id+", não pode ser desabilitado pois ele não existe.");
+            return new BadRequestException("Não foi possível desabilitar esse usuário, pois ele não existe.");
         });
 
         if(!user.isEnabled()){
-            log.info("The user with id: "+id+", cannot be disabled because he is disabled already.");
-            throw new BadRequestException("It's not possible to disable the user with id: "+id+".");
+            log.info("O usuário com o id: "+id+", não pode ser desabilitado novamente.");
+            throw new BadRequestException("Não foi possível desabilitar o usuário pois ele já está desabilitado");
         }
 
         user.setEnabled(false);
